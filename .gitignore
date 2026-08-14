@@ -1,0 +1,71 @@
+# Secrets / Zugangsdaten
+service-account.json
+*service-account*.json
+*.pem
+*.key
+.env
+.env.*
+key.properties
+*.jks
+*.keystore
+
+# Python (server)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+*.g.dart.bak
+app.*.symbols
+app.*.map.json
+
+# Android
+.gradle/
+local.properties
+android/.gradle/
+android/captures/
+android/app/debug/
+android/app/profile/
+android/app/release/
+*.apk
+*.aab
+
+# iOS / macOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework/
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/.last_build_id
+macos/Pods/
+macos/Flutter/ephemeral/
+*.xcuserstate
+xcuserdata/
+
+# Editoren / IDE
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.claude/
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs / Temporäres
+*.log
+*.tmp

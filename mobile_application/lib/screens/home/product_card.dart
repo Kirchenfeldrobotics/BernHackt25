@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:mobile_application/provider/providers.dart";
 import "package:mobile_application/theme.dart" ;
 import "package:mobile_application/shared/styled_text.dart" ;
 import "package:mobile_application/data_models/product.dart" ; 
 
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
   const ProductCard({
     required this.myProduct, 
     super.key
@@ -13,51 +15,28 @@ class ProductCard extends StatelessWidget {
   final Product myProduct ; 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       
-  padding: const EdgeInsets.only(
-    left: 10.0,
-    right: 10.0,
-    top: 5.0,
-    bottom: 5.0,
-  ),
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0,),
       child:Card(
-      color : AppColors.secondaryAccentColor!, 
+      color : AppColors.secondaryAccentColor, 
       shape : RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))), 
       
       child : Row(
-        spacing : 14, 
-        children : [
-          Icon(
-            Icons.apple_outlined,
-            color : Colors.black,  
-            size : 40
-            
+        mainAxisAlignment : MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding : EdgeInsetsGeometry.all(12), 
+            child: StyledHeading(myProduct.productName)
           ),
-          Column(
-            crossAxisAlignment : CrossAxisAlignment.start, 
-            children : [
-              StyledTitle(myProduct.productName), 
-              Row(
-                spacing : 4, 
-                crossAxisAlignment : CrossAxisAlignment.center, 
-                children : [
-                  Icon(
-                    Icons.folder_outlined, 
-                    color : Colors.black
-                  ), 
-                  StyledText("1"), 
-                  Text("Nahrungsmittel")
-                
-                  
-                ]
-                
-              )
-            ]
+          IconButton(
+            icon : Icon(Icons.delete_outline), 
+            onPressed: () {
+              ref.read(productNotifierProvider.notifier).removeProduct(myProduct) ; 
+            },
           )
-        ]
-        
+        ],
       )
       
       )

@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mobile_application/data_models/product.dart';
+import 'package:mobile_application/provider/providers.dart';
 import 'package:mobile_application/services/camera.dart';
 import 'package:mobile_application/services/api.dart';
+import "dart:convert" ;
+
+import 'package:uuid/uuid.dart'; 
  
-class CameraScreen extends StatefulWidget {
+class CameraScreen extends ConsumerStatefulWidget  {
   const CameraScreen({Key? key}) : super(key: key);
  
   @override
-  State<CameraScreen> createState() => _CameraScreenState();
+  ConsumerState<CameraScreen> createState() => _CameraScreenState();
 }
  
-class _CameraScreenState extends State<CameraScreen> {
+class _CameraScreenState extends ConsumerState<CameraScreen> {
   final CameraService _cameraService = CameraService();
   final ApiService _apiService = ApiService();
  
@@ -43,9 +49,16 @@ Future<void> _takePicture() async {
       _result = "Foto wird analysiert...";
     });
 
-    _apiService.uploadImage(imagePath).then((response) {
+    ApiService.uploadImage(imagePath).then((response) {
       setState(() {
-        _result = response ?? "Keine Antwort vom Server";
+        _result = null ; 
+        ref.read(productNotifierProvider.notifier).addProduct(Product(
+          productName : json.decode(response!)["labels"], 
+          productId : Uuid().v4()
+        )) ; 
+        Navigator.pop(context) ; 
+        
+        // _result = response ?? "Keine Antwort vom Server";
       });
     }).catchError((e) {
       setState(() {

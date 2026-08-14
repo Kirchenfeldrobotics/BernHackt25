@@ -11,16 +11,16 @@ class Menu {
     required this.menuTags
   }) ; 
 
-  final String menuId ; 
-  final String menuTitle ; 
-  final String menuInstructions ; 
-  final String menuIngredients ; 
-  final String menuCategory ; 
-  final String menuImage ; 
-  final String menuTags ; 
+  final String menuId;
+  final String menuTitle;
+  final String menuCategory;
+  final String menuInstructions;
+  final String menuImage;
+  final String? menuTags;
+  final List<Ingredient> menuIngredients;
 
   // serialize and deserialize 
-  Map<String, String > toFirestore() {
+  Map<String, dynamic > toFirestore() {
     return {
       "id" : menuId, 
       "name" : menuTitle, 
@@ -33,12 +33,10 @@ class Menu {
   }
 
   factory Menu.fromFirestore(
-    DocumentSnapshot<Map<String, String>> snapshot, 
+    Map<String, dynamic> data, 
     SnapshotOptions? options
   ) {
     
-    final Map<String, dynamic> data = snapshot.data()! ; 
-
     return Menu(
       menuId : data["title"], 
       menuTitle : data["name"], 
@@ -50,4 +48,34 @@ class Menu {
     ) ; 
   }
 
+  factory Menu.fromJson(Map<String, dynamic> json) {
+    var ingList = (json['ingredients'] as List)
+        .map((i) => Ingredient.fromJson(i))
+        .toList();
+
+    return Menu(
+      menuId: json['id'] ?? '',
+      menuTitle: json['name'] ?? '',
+      menuCategory: json['category'] ?? '',
+      menuInstructions: json['instructions'] ?? '',
+      menuImage: json['image'] ?? '',
+      menuTags: json['tags'],
+      menuIngredients: ingList,
+    );
+  }
+}
+
+
+class Ingredient {
+  final String ingredient;
+  final String measure;
+
+  Ingredient({required this.ingredient, required this.measure});
+
+  factory Ingredient.fromJson(Map<String, dynamic> json) {
+    return Ingredient(
+      ingredient: json['ingredient'] ?? '',
+      measure: json['measure'] ?? '',
+    );
+  }
 }

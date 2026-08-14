@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:mobile_application/main.dart";
+import "package:mobile_application/provider/providers.dart";
 import "package:mobile_application/screens/account_screen/account_screen.dart";
 import "package:mobile_application/screens/home/home_screen.dart";
 import "package:mobile_application/screens/planning_screen/planning_screen.dart";
 import "package:mobile_application/screens/shared_for_screens/screen_enum.dart";
+import "package:mobile_application/services/api.dart";
 import "package:mobile_application/shared/styled_text.dart";
 import "package:mobile_application/theme.dart";
 import "package:mobile_application/shared/styled_button.dart";
@@ -17,15 +20,15 @@ import "package:mobile_application/screens/shared_for_screens/navigation_buttons
 // do NOT use outside of this file!
 
 
-class ScreenBottomNavigationBar extends StatelessWidget {
+class ScreenBottomNavigationBar extends ConsumerWidget {
   const ScreenBottomNavigationBar({required this.currentScreen, super.key});
 
   final AppScreensEnum currentScreen;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: EdgeInsetsGeometry.symmetric(vertical: 20, horizontal: 15),
+      margin: EdgeInsetsGeometry.only(top: 20, right: 15, left : 15, bottom : 55),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: AppColors.secondaryAccentColor,
@@ -52,11 +55,15 @@ class ScreenBottomNavigationBar extends StatelessWidget {
             child: NavigationBarButton(
               icon: Icon(Icons.menu_book),
               actionFunc: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (ctx) => MenuScreen()),
-                );
-              },
+                
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                  return MenuScreen() ; 
+                })) ;  
+              }
+                
+                
+              
+              
             ),
           ),
           SizedBox(width: 10),

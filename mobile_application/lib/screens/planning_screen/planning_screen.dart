@@ -7,6 +7,16 @@ import 'package:mobile_application/theme.dart';
 
 const List<String> weekDayNames = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"] ; 
 
+const Map<String, List<String>> hardCodedMeals = {
+  "Mo": ["Rührei", "Spaghetti", "Kartoffelsalat"],
+  "Di": ["Waffeln", "Nudelsuppe", "Pizza"],
+  "Mi": ["Pancakes", "Süßkartoffelsuppe", "Risotto"],
+  "Do": ["Haferflocken", "Kartoffelknödel", "Chili con Carne"],
+  "Fr": ["Toast", "Ravioli", "Sushi"],
+  "Sa": ["Croissant", "Burger", "Döner"],
+  "So": ["Brötchen", "Lasagne", "Käsefondue"]
+};
+
 enum SubScreen {
   calendar, 
   persones
@@ -15,48 +25,41 @@ enum SubScreen {
 class WeekDay extends StatelessWidget {
   const WeekDay({
     required this.name, 
+    required this.meals,
     super.key
   });
 
-  final String name ; 
+  final String name;
+  final List<String> meals;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin : EdgeInsetsGeometry.symmetric(horizontal : 15, vertical : 5), 
+      margin : const EdgeInsets.symmetric(horizontal : 15, vertical : 5), 
       child: Card(
-        color : AppColors.secondaryAccentColor,   
+        color : AppColors.secondaryAccentColor, 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ), 
         child : ExpansionTile(
           title : StyledTitle(name), 
-          trailing : Icon(Icons.expand_more), 
+          trailing : const Icon(Icons.expand_more), 
           expandedCrossAxisAlignment : CrossAxisAlignment.end,
           children : [
-            for (String time in ["Morgen", "Mittag", "Abend"])
+            for (int i = 0; i < meals.length; i++)
               Container(
-                margin : EdgeInsetsGeometry.only(left : 20), 
+                margin : const EdgeInsets.only(left : 20), 
                 child: Row(
                   children : [
-                    StyledHeading("$time: "), 
-                    StyledText("Menü")
+                    StyledHeading("${["Morgen", "Mittag", "Abend"][i]}: "), 
+                    StyledText(meals[i])
                   ]
                 ),
               )
           ]
         ) 
       ),
-    ) ;   
-  }
-}
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+    );   
   }
 }
 
@@ -68,52 +71,55 @@ class PlanningScreen extends StatefulWidget {
 }
 
 class _PlanningScreenState extends State<PlanningScreen> {
-  SubScreen _subScreens = SubScreen.calendar ; 
+  SubScreen _subScreens = SubScreen.calendar; 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Menüplan"),
+        title: const Text("Menüplan"),
         actions: [
           NavigationBarButtonWrapper(
-            isChoosen: _subScreens == SubScreen.calendar ? true : false,
+            isChoosen: _subScreens == SubScreen.calendar,
             child: NavigationBarButton(
-              icon: Icon(Icons.calendar_today),
+              icon: const Icon(Icons.calendar_today),
               actionFunc: () {
-                setState(() {_subScreens = SubScreen.calendar ; }) ; 
+                setState(() {_subScreens = SubScreen.calendar;}); 
               },
             ),
           ),
           NavigationBarButtonWrapper(
-            isChoosen: _subScreens == SubScreen.persones ? true : false,
+            isChoosen: _subScreens == SubScreen.persones,
             child: NavigationBarButton(
-              icon: Icon(Icons.group),
+              icon: const Icon(Icons.group),
               actionFunc: () {
-                setState(() {_subScreens = SubScreen.persones ;}) ; 
+                setState(() {_subScreens = SubScreen.persones;}); 
               },
             ),
           ),
         ],
       ),
-      bottomNavigationBar: ScreenBottomNavigationBar(currentScreen: AppScreensEnum.planning),
-      body: Column(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: AppColors.secondaryAccentColor,
+      bottomNavigationBar: const ScreenBottomNavigationBar(currentScreen: AppScreensEnum.planning),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColors.secondaryAccentColor,
+              ),
+              height: 60,
+              margin: const EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 15),
+              child: const StyledText("Aktuelle Woche"),
             ),
-            height: 60,
-            margin: EdgeInsets.only(top: 10, left: 15, right: 15, bottom: 15),
-            child: StyledText("Aktuelle Woche"),
-          ),
-          for (String wdn in weekDayNames)
-            WeekDay(
-              name: wdn,
-            )
-        ],
+            for (String wdn in weekDayNames)
+              WeekDay(
+                name: wdn,
+                meals: hardCodedMeals[wdn]!,
+              ),
+          ],
+        ),
       ),
     );
   }

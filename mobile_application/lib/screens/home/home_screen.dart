@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:mobile_application/main.dart" ;
+import "package:mobile_application/provider/providers.dart";
 import "package:mobile_application/screens/shared_for_screens/screen_enum.dart";
 import "package:mobile_application/shared/styled_text.dart" ;
 import "package:mobile_application/theme.dart" ;
@@ -10,25 +12,18 @@ import "package:uuid/uuid.dart" ;
 import "package:mobile_application/screens/menu_screen/menu_screen.dart" ; 
 import "package:mobile_application/screens/shared_for_screens/bottom_navigation_bar.dart" ; 
 
-final List<Product> dummyProducts = [
-  Product(productName : "Jakok's Mate", productId : Uuid().v4()), 
-  Product(productName : "KOFFEIN, MEH BITTE", productId : Uuid().v4()), 
-  Product(productName: "Nume eis Bier", productId : Uuid().v4()), 
-  Product(productName: "Chickenmassala", productId : Uuid().v4()), 
-  Product(productName: "KokKai's Chatz", productId : Uuid().v4()), 
-] ; 
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget  {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final List<Product> myProducts = ref.watch(productNotifierProvider) ; 
     return Scaffold(
       appBar: AppBar(
         title: Text("Essensliste"),
@@ -37,10 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
         currentScreen: AppScreensEnum.home,
       ), 
       body: ListView.builder(
-        itemCount: dummyProducts.length,
+        itemCount: myProducts.length,
         itemBuilder: (_, index) {
           return Container(
-            child: ProductCard(myProduct: dummyProducts[index]),
+            child: ProductCard(myProduct: myProducts[index]),
           );
         },
       ),
