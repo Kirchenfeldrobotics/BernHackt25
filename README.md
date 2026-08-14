@@ -1,4 +1,4 @@
-# Meal-Cam
+# Mealcam
 
 Projekt vom BärnHäckt 2025 (22.–24. August 2025), Team Kirchenfeldrobotics: Jakob, Phileas, Nick, Nils und Valery.
 
